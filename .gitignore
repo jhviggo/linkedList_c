@@ -1,0 +1,7 @@
+# files
+*.exe
+*.sh
+
+# folders
+.vscode/
+out/
