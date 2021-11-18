@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 typedef enum {
 	LINKED_LIST_OK,
@@ -33,3 +34,6 @@ linkedList_return_codes_t linkedList_removeItem(linkedList_t list, void *item);
 linkedList_iterator_t linkedList_getIterator(linkedList_t list);
 
 void* linkedList_iteratorNext(linkedList_t list, linkedList_iterator_t *iterator);
+
+
+void linkedList_print(linkedList_t list);
