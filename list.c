@@ -116,13 +116,3 @@ linkedList_return_codes_t linkedList_removeItem(linkedList_t list, void *item) {
   }
   return LINKED_LIST_NOT_FOUND;
 }
-
-
-void linkedList_print(linkedList_t list) {
-  linkedList_t temp = list;
-
-  while (temp != NULL) {
-    printf("%s\n", temp->item);
-    temp = temp->next;
-  }
-}
