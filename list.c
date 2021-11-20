@@ -35,8 +35,10 @@ linkedList_return_codes_t linkedList_push(linkedList_t list, void *item) {
 
 /* Pull */
 void * linkedList_pull(linkedList_t list) {
+  linkedList_t *head = &list;
   void* tempItem = list->item;
   *list = *list->next;
+  free(head);
   return tempItem;
 }
 
@@ -74,7 +76,7 @@ int linkedList_length(linkedList_t list) {
   linkedList_t temp = list;
   int len = 0;
 
-  while (temp != NULL) {
+  while (temp != NULL && temp->item != NULL) {
     len += 1;
     temp = temp->next;
   }
@@ -83,19 +85,36 @@ int linkedList_length(linkedList_t list) {
 
 /* Clear */
 void linkedList_clear(linkedList_t list) {
+  linkedList_t temp = list;
 
+  while (temp != NULL) {
+    free(&temp);
+    temp = temp->next;
+  }
+  list->item = NULL;
+  list->next = NULL;
 }
 
+/* Remove item */
 linkedList_return_codes_t linkedList_removeItem(linkedList_t list, void *item) {
+  linkedList_t temp = list->next;
+  linkedList_t previous = list;
 
-}
+  if (list->item == item) {
+    list->item = NULL;
+    return LINKED_LIST_OK;
+  }
 
-linkedList_iterator_t linkedList_getIterator(linkedList_t list) {
-
-}
-
-void *linkedList_iteratorNext(linkedList_t list, linkedList_iterator_t *iterator) {
-
+  while (temp != NULL) {
+    if (temp->item == item) {
+      previous->next = temp->next;
+      free(&temp);
+      return LINKED_LIST_OK;
+    }
+    previous = temp;
+    temp = temp->next;
+  }
+  return LINKED_LIST_NOT_FOUND;
 }
 
 
