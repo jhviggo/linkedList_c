@@ -1,27 +1,32 @@
 #include <stdbool.h>
-#include <tempDriver.h>
+#include "tempDriver.h"
 #include "temperature.h"
 
-extern bool temperature_metricUnits; // Declaration
+typedef struct temperature {
+	float latestTemp;
+	uint8_t driverPort;
+} temperature;
 
-static float _latestTemp = 0.0;
-static uint8_t _driverPort;
+extern bool temperature_metricUnits;
 
 static float _calculateTemp(float voltage) {
 	return 15.0+(voltage * 5.0); // dummy calc
 }
 
-void temperature_create(uint8_t portNo) {
-	_driverPort = portNo;
+temperature_t temperature_create(uint8_t portNo) {
+	temperature_t _newTemp = calloc(sizeof(temperature), 1);
+	_newTemp->driverPort = portNo;
+	_newTemp->latestTemp = 0.0;
 	temperatureDriver_initDriver(portNo);
+	return _newTemp;
 }
 
-void temperature_meassure(void) {
-	_latestTemp = _calculateTemp(temperatureDriver_getVoltage());
+void temperature_meassure(temperature_t sensor) {
+	sensor->latestTemp = _calculateTemp(temperatureDriver_getVoltage());
 }
 
-float temperature_getTemperature(void){
-	float _tmp = _latestTemp;
+float temperature_getTemperature(temperature_t sensor){
+	float _tmp = sensor->latestTemp;
 	if (temperature_metricUnits) {
 		_tmp *= 0.2; // dummy conversion
 	}
